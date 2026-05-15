@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>George &amp; Olivia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:        #1a1208;
+      --ink-muted:  #6b5f4a;
+      --ink-faint:  #b0a48c;
+      --paper:      #f5f0e8;
+      --paper-dark: #ede7d6;
+      --rule:       #c8bea8;
+      --accent:     #8b1a1a;
+    }
+
+    html {
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    body {
+      font-family: 'Libre Baskerville', Georgia, serif;
+      background: var(--paper);
+      padding: 1.5rem 1rem 0;
+    }
+
+    .site-wrap {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* ── MASTHEAD ─────────────────────────────── */
+
+    .masthead {
+      border-top: 3px double var(--rule);
+      border-bottom: 3px double var(--rule);
+      padding: 0.6rem 0 0.8rem;
+      text-align: center;
+    }
+
+    .masthead-tagline {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      text-transform: uppercase;
+      font-size: clamp(0.7rem, 1.8vw, 0.875rem);
+      letter-spacing: 0.12em;
+      color: var(--ink-muted);
+      margin-bottom: 0.3rem;
+    }
+
+    .site-title {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: clamp(2.4rem, 9vw, 3.6rem);
+      line-height: 1.05;
+      margin-bottom: 0.5rem;
+    }
+
+    .t-name { color: var(--accent); }
+
+    .t-amp {
+      color: var(--ink-muted);
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .masthead-rule {
+      border-top: 1px solid var(--rule);
+    }
+
+    /* ── NAVIGATION ───────────────────────────── */
+
+    .strip-nav {
+      display: flex;
+      align-items: center;
+      padding: 0.6rem 0;
+      gap: 0.5rem;
+    }
+
+    .nav-arrow {
+      flex-shrink: 0;
+      width: 2.4rem;
+      height: 2.4rem;
+      background: none;
+      border: 1px solid var(--ink);
+      color: var(--ink);
+      font-size: 1.2rem;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      transition: background 0.15s;
+    }
+
+    .nav-arrow:not(:disabled):hover { background: var(--paper-dark); }
+    .nav-arrow:disabled { opacity: 0.25; cursor: default; }
+
+    .date-selector {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      position: relative;
+    }
+
+    .date-btn {
+      background: none;
+      border: none;
+      border-bottom: 1px dashed var(--ink-muted);
+      padding: 0.1rem 0.5rem 0.2rem;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.1rem;
+    }
+
+    .date-btn:hover { border-bottom-style: solid; }
+
+    .t-date {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(0.95rem, 2.4vw, 1.1rem);
+      color: var(--ink);
+    }
+
+    .t-counter {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      text-transform: uppercase;
+      font-size: clamp(calc(0.6rem + 1px), 1.7vw, 0.82rem);
+      letter-spacing: 0.09em;
+      color: var(--ink-faint);
+    }
+
+    /* ── DROPDOWN ─────────────────────────────── */
+
+    .dropdown {
+      display: none;
+      position: absolute;
+      top: calc(100% + 0.4rem);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--paper);
+      border: 1px solid var(--rule);
+      min-width: 220px;
+      max-width: min(300px, calc(100vw - 2rem));
+      z-index: 200;
+      box-shadow: 0 3px 12px rgba(26, 18, 8, 0.14);
+    }
+
+    .dropdown.is-open { display: block; }
+
+    .dropdown-header {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      text-transform: uppercase;
+      font-size: clamp(0.6rem, 1.5vw, 0.72rem);
+      letter-spacing: 0.12em;
+      color: var(--ink-muted);
+      padding: 0.5rem 0.75rem 0.4rem;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .dropdown-list {
+      list-style: none;
+      max-height: 240px;
+      overflow-y: auto;
+    }
+
+    .dropdown-list li + li { border-top: 1px solid var(--paper-dark); }
+
+    .dropdown-list button {
+      width: 100%;
+      background: none;
+      border: none;
+      text-align: left;
+      padding: 0.45rem 0.75rem;
+      cursor: pointer;
+      font-family: 'IM Fell English', serif;
+      font-size: clamp(0.875rem, 2.2vw, 1rem);
+      color: var(--ink);
+      line-height: 1.3;
+    }
+
+    .dropdown-list button:hover { background: var(--paper-dark); }
+
+    .dropdown-list button.is-active {
+      color: var(--accent);
+      font-style: italic;
+    }
+
+    /* ── STRIP ────────────────────────────────── */
+
+    .strip-container { padding-top: 0.75rem; }
+
+    .strip-frame {
+      overflow: hidden;
+      line-height: 0;
+      background: var(--paper-dark);
+    }
+
+    @media (min-width: 540px) {
+      .strip-frame.is-square {
+        max-width: 460px;
+        margin: 0 auto;
+      }
+    }
+
+    .strip-img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .strip-meta {
+      text-align: right;
+      padding-top: 0.3rem;
+    }
+
+    .strip-number {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      font-size: clamp(calc(0.75rem + 1px), 2vw, 0.95rem);
+      color: var(--ink-faint);
+    }
+
+    /* ── FOOTER ───────────────────────────────── */
+
+    .site-footer {
+      margin-top: 1.5rem;
+      padding-bottom: 2.5rem;
+    }
+
+    .footer-rule-ink    { border-top: 3px double var(--rule); margin-bottom: 0.75rem; }
+    .footer-rule-colour { display: none; }
+
+    .footer-tagline {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      text-transform: uppercase;
+      font-size: clamp(0.65rem, 1.6vw, 0.8rem);
+      letter-spacing: 0.06em;
+      color: var(--ink-faint);
+      text-align: center;
+      line-height: 2;
+    }
+
+    .keyboard-hint {
+      display: none;
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      text-transform: uppercase;
+      font-size: 0.6rem;
+      letter-spacing: 0.06em;
+      color: var(--ink-faint);
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .keyboard-hint { display: block; }
+    }
+  </style>
+</head>
+<body>
+  <div class="site-wrap">
+
+    <header class="masthead">
+      <p class="masthead-tagline">A comic strip about small moments</p>
+      <h1 class="site-title">
+        <span class="t-name">George</span> <span class="t-amp">&amp;</span> <span class="t-name">Olivia</span>
+      </h1>
+    </header>
+
+    <nav class="strip-nav" aria-label="Comic navigation">
+      <button class="nav-arrow" id="btn-prev" aria-label="Previous comic">&#8592;</button>
+
+      <div class="date-selector">
+        <button class="date-btn" id="date-btn" aria-expanded="false" aria-haspopup="listbox">
+          <span class="t-date" id="date-display"></span>
+          <span class="t-counter" id="comic-counter"></span>
+        </button>
+        <div class="dropdown" id="dropdown">
+          <div class="dropdown-header">Select a date</div>
+          <ul class="dropdown-list" id="dropdown-list" role="listbox"></ul>
+        </div>
+      </div>
+
+      <button class="nav-arrow" id="btn-next" aria-label="Next comic">&#8594;</button>
+    </nav>
+
+    <main class="strip-container">
+      <div class="strip-frame">
+        <img class="strip-img" id="strip-img" src="" alt="">
+      </div>
+      <div class="strip-meta">
+        <span class="strip-number" id="strip-number"></span>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-rule-ink"></div>
+      <div class="footer-rule-colour"></div>
+      <p class="footer-tagline">
+        All moments happened in real life.<br>
+        Comic strips and site created by AI.
+      </p>
+    </footer>
+
+  </div>
+
+  <script>
+    /* ─────────────────────────────────────────────────────────────
+       STRIPS — add one object per comic, oldest first, newest last.
+       Publishing: drop the image file in this folder, append a line.
+
+       { date: "YYYY-MM-DD", image: "filename.png", alt: "description" }
+    ───────────────────────────────────────────────────────────── */
+    const STRIPS = [
+{ date: "2026-05-15", image: "strip-001.png", alt: "George holds up his game device and tells mama: when the alarm rings, you stop brushing teeth and come out, ok? The Reverse Uno.", square: true },
+    ];
+
+    /* ── helpers ── */
+    const DAY_NAMES   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+    function fmtDate(str) {
+      const [y, m, d] = str.split('-').map(Number);
+      const wd = new Date(y, m - 1, d).getDay();
+      return `${DAY_NAMES[wd]}, ${d} ${MONTH_NAMES[m - 1]} ${y}`;
+    }
+
+    function zeroPad(n) { return String(n).padStart(3, '0'); }
+
+    /* ── state ── */
+    let cur = STRIPS.length - 1;
+
+    /* ── elements ── */
+    const btnPrev  = document.getElementById('btn-prev');
+    const btnNext  = document.getElementById('btn-next');
+    const dateBtn  = document.getElementById('date-btn');
+    const dateDisp = document.getElementById('date-display');
+    const counter  = document.getElementById('comic-counter');
+    const dropdown = document.getElementById('dropdown');
+    const list     = document.getElementById('dropdown-list');
+    const stripImg = document.getElementById('strip-img');
+    const numEl    = document.getElementById('strip-number');
+
+    /* ── build dropdown list ── */
+    function buildList() {
+      list.innerHTML = '';
+      for (let i = STRIPS.length - 1; i >= 0; i--) {
+        const li  = document.createElement('li');
+        const btn = document.createElement('button');
+        btn.type          = 'button';
+        btn.dataset.idx   = i;
+        btn.textContent   = fmtDate(STRIPS[i].date);
+        btn.addEventListener('click', () => { render(i); closeDD(); });
+        li.appendChild(btn);
+        list.appendChild(li);
+      }
+    }
+
+    /* ── render ── */
+    function render(idx) {
+      cur = idx;
+      const s = STRIPS[idx];
+      stripImg.src         = s.image;
+      stripImg.alt         = s.alt;
+      stripImg.closest('.strip-frame').classList.toggle('is-square', !!s.square);
+      dateDisp.textContent = fmtDate(s.date);
+      counter.textContent  = `comic ${idx + 1} of ${STRIPS.length}`;
+      numEl.textContent    = zeroPad(idx + 1);
+      btnPrev.disabled     = idx === 0;
+      btnNext.disabled     = idx === STRIPS.length - 1;
+      list.querySelectorAll('button').forEach(btn => {
+        btn.classList.toggle('is-active', Number(btn.dataset.idx) === idx);
+      });
+    }
+
+    function go(idx) {
+      if (idx >= 0 && idx < STRIPS.length) render(idx);
+    }
+
+    /* ── dropdown ── */
+    function openDD()  { dropdown.classList.add('is-open');    dateBtn.setAttribute('aria-expanded', 'true');  }
+    function closeDD() { dropdown.classList.remove('is-open'); dateBtn.setAttribute('aria-expanded', 'false'); }
+
+    dateBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      dropdown.classList.contains('is-open') ? closeDD() : openDD();
+    });
+
+    dropdown.addEventListener('click', e => e.stopPropagation());
+    document.addEventListener('click', () => closeDD());
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape')     { closeDD(); return; }
+      if (e.key === 'ArrowLeft')  { e.preventDefault(); go(cur - 1); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); go(cur + 1); }
+    });
+
+    btnPrev.addEventListener('click', () => go(cur - 1));
+    btnNext.addEventListener('click', () => go(cur + 1));
+
+    let touchStartX = 0;
+    document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+    document.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].screenX - touchStartX;
+      if (Math.abs(dx) > 50) dx < 0 ? go(cur + 1) : go(cur - 1);
+    }, { passive: true });
+
+    /* ── init ── */
+    buildList();
+    if (STRIPS.length > 0) render(STRIPS.length - 1);
+  </script>
+</body>
+</html>
